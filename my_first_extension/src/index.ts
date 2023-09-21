@@ -5,7 +5,7 @@ import {
 
 import { ICommandPalette, MainAreaWidget } from '@jupyterlab/apputils';
 import { Widget } from '@lumino/widgets';
-
+//this is a test
 /**
  * Initialization data for the myextension extension.
  */
