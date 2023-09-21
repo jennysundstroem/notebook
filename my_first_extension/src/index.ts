@@ -54,3 +54,5 @@ const plugin: JupyterFrontEndPlugin<void> = {
 };
 
 export default plugin;
+
+//Just a comment
