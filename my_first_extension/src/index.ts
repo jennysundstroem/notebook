@@ -2,55 +2,76 @@ import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
+import { ICommandPalette } from '@jupyterlab/apputils';
+import { FileMenu } from '@jupyterlab/mainmenu';
+import { showDialog, Dialog } from '@jupyterlab/apputils';
+import { NotebookPanel } from '@jupyterlab/notebook';
 
-import { ICommandPalette, MainAreaWidget } from '@jupyterlab/apputils';
-import { Widget } from '@lumino/widgets';
+async function makeApiRequest(path: string) {
+  try {
+    const apiURL = 'http://localhost:8888/api/contents/' + path;
+    const response = await fetch(apiURL, {
+      method: 'GET',
+    });
+    if (!response.ok) {
+      // Handle non-OK response (e.g., 404 or 500)
+      throw new Error(`API request failed with status: ${response.status}`);
+      console.log('Tear');
+    }
+    const data = await response.json();
+    // Handle the response data here
+    console.log('API Response:', data);
+    return data;
+  } catch (error) {
+    // Handle errors here
+    console.error('API Error:', error);
+  }
+}
 
-/**
- * Initialization data for the myextension extension.
- */
 const plugin: JupyterFrontEndPlugin<void> = {
   id: 'jupyterlab-apod',
-  description: 'Show a random NASA Astronomy Picture of the Day in a JupyterLab panel.',
+  description: 'Display Notebook Document Details.',
   autoStart: true,
   requires: [ICommandPalette],
   activate: (app: JupyterFrontEnd, palette: ICommandPalette) => {
     console.log('JupyterLab extension jupyterlab_apod is activated!');
 
-    // Define a widget creator function,
-    // then call it to make a new widget
-    const newWidget = () => {
-      // Create a blank content widget inside of a MainAreaWidget
-      const content = new Widget();
-      const widget = new MainAreaWidget({ content });
-      widget.id = 'apod-jupyterlab';
-      widget.title.label = 'Astronomy Picture';
-      widget.title.closable = true;
-      return widget;
-    }
-    let widget = newWidget();
-
     // Add an application command
     const command: string = 'apod:open';
     app.commands.addCommand(command, {
-      label: 'Random Astronomy Picture',
-      execute: () => {
-        // Regenerate the widget if disposed
-        if (widget.isDisposed) {
-          widget = newWidget();
+      label: 'Document Details',
+      execute: async () => {
+        const activeNotebook = app.shell.currentWidget as NotebookPanel;
+        if (activeNotebook) {
+          const notebookPath = activeNotebook.context.path;
+          let data = await makeApiRequest(notebookPath);
+          const result = await showDialog({
+            title: 'Document Details',
+            body: `
+              Document Name: ${JSON.stringify(data?.name)}. \r\n
+              Document Path: ${JSON.stringify(data?.path)}. \r\n
+              Created: ${JSON.stringify(data?.created)} \r\n
+              Last Modified: ${JSON.stringify(data?.last_modified)}
+            `,
+            buttons: [Dialog.okButton({ label: 'OK' })],
+          });
+
+          if (result.button.label === 'OK') {
+            console.log('OK button clicked');
+          }
         }
-        if (!widget.isAttached) {
-          // Attach the widget to the main work area if it's not there
-          app.shell.add(widget, 'main');
-        }
-        // Activate the widget
-        app.shell.activateById(widget.id);
-      }
+      },
     });
 
-    // Add the command to the palette.
-    palette.addItem({ command, category: 'Tutorial' });
-  }
+    // Add the command to the palette (optional)
+    palette.addItem({ command, category: 'Document Details' });
+
+    // Add the "Document Details" button to the File menu
+    const fileMenu = new FileMenu({ commands: app.commands });
+    fileMenu.title.label = 'File';
+    fileMenu.addItem({ command });
+    app.shell.add(fileMenu, 'menu');
+  },
 };
 
 export default plugin;
