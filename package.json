@@ -68,6 +68,7 @@
   "dependencies": {
     "@jupyterlab/application": "^4.0.6",
     "@jupyterlab/apputils": "^4.1.6",
+    "@jupyterlab/mainmenu": "^4.0.6",
     "@jupyterlab/rendermime": "^4.0.6",
     "@lumino/widgets": "^2.3.0"
   }
