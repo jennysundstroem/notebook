@@ -10,6 +10,18 @@ computing.
 
 ![Jupyter notebook example](docs/resources/running_code_med.png 'Jupyter notebook example')
 
+For educational purposes a feature request from the Jupyter Notebook repo was developed. The extension is covered in the following section before the original documentation continues.
+
+## Document Information extension
+
+To contribute further on the extension first follow steps and setup desribed in section Installation.
+
+The extension made is for a button labeled Document Details. The button is added in the main menu of the Jupyter Notebook toolbar under dropdown button 'File'. When pressed it displays information about the active Notebook in a dialog. This feature displays the following information about the Notebook document: name, path, date of creating and date for last edited.
+
+The extension index.ts file has the logic for making the API call for getting the information displayed in the dialog. It also holds the logic for creating the new button and adding it to the toolbar dropdown. For more information about extending the main menu toolbar: https://jupyterlab.readthedocs.io/en/stable/extension/extension_points.html#main-menu
+
+JavaScript tests were added with Jest Framework/Library according to Jupyter standards.
+
 ## Maintained versions
 
 We maintain the **two most recently released major versions of Jupyter Notebook**, Notebook v5 and Classic Notebook v6. After Notebook v7.0 is released, we will no longer maintain Notebook v5. All Notebook v5 users are strongly advised to upgrade to Classic Notebook v6 as soon as possible.
