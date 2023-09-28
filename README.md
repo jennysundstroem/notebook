@@ -10,11 +10,9 @@ computing.
 
 ![Jupyter notebook example](docs/resources/running_code_med.png 'Jupyter notebook example')
 
-For educational purposes a feature request from the Jupyter Notebook repo was developed. The extension is covered in the following section before the original documentation continues.
+## Document Information Extension
 
-## Document Information extension
-
-To contribute further on the extension first follow steps and setup desribed in section Installation.
+For educational purposes a feature request from the Jupyter Notebook repo was developed. To contribute further on the extension first follow steps and setup desribed in section Installation.
 
 The extension made is for a button labeled Document Details. The button is added in the main menu of the Jupyter Notebook toolbar under dropdown button 'File'. When pressed it displays information about the active Notebook in a dialog. This feature displays the following information about the Notebook document: name, path, date of creating and date for last edited.
 
